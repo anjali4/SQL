@@ -1,28 +1,14 @@
 
-/* ## MS-SQL PROJECT on Banking Transactions by Gyan Kumar GM ! */
 
--- PHASE I of project begins 
-
---Q1. Create a database for a banking application called 'Bank'. 
 
 create database dbBankGM;
 GO
 
-/* NOTE: Unlike asked in question database name has been used as 'dbBankGM' instead of 'Bank' in order to make it unique 
-from other students. Following code is used to select 'dbBankGM' as current database */
+
 
 use dbBankGM;
 GO
 
---Q2. Create all the tables mentioned in the database diagram. 
---Q3. Create all the constraints based on the database diagram. 
-
---NOTE: Solution to questions 2 and 3 are provided at once as follows. This was confirmed with teacher! 
-
-/* CREATE TABLE & ADD CONSTRAINTS Section */
--- Creating tables only with primary keys first 
-
---Creating table named UserLogins
 CREATE TABLE UserLogins
 (
 	UserLoginID SMALLINT NOT NULL IDENTITY(1,1),
@@ -32,7 +18,7 @@ CREATE TABLE UserLogins
 );
 GO
 
---Creating table named UserSecurityQuestions
+
 CREATE TABLE UserSecurityQuestions
 (
 	UserSecurityQuestionID TINYINT NOT NULL IDENTITY(1,1),
@@ -42,7 +28,6 @@ CREATE TABLE UserSecurityQuestions
 GO
 
 
---Creating table named AccountType
 CREATE TABLE AccountType
 (
 	AccountTypeID TINYINT NOT NULL IDENTITY(1,1),
@@ -51,9 +36,6 @@ CREATE TABLE AccountType
 );
 GO
 
---Creating table named SavingsInterestRates
-/* NOTE:  Altered the table to accept datatype as NUMERIC(9,2) in order to avoid Arithmetic Conversion error using 
-code "ALTER TABLE SavingsInterestRates ALTER COLUMN IntetestRatesValue NUMERIC(9,2);" */
 CREATE TABLE SavingsInterestRates
 (
 	InterestSavingRatesID TINYINT NOT NULL IDENTITY(1,1),
@@ -63,7 +45,6 @@ CREATE TABLE SavingsInterestRates
 );
 GO
 
---Creating table named AccountStatusType
 CREATE TABLE AccountStatusType
 (
 	AccountStatusTypeID TINYINT NOT NULL IDENTITY(1,1),
@@ -72,7 +53,6 @@ CREATE TABLE AccountStatusType
 );
 GO
 
---Creating table named FailedTransactionErrorType
 CREATE TABLE FailedTransactionErrorType
 (
 	FailedTransactionErrorTypeID TINYINT NOT NULL IDENTITY(1,1),
@@ -81,7 +61,7 @@ CREATE TABLE FailedTransactionErrorType
 );
 GO
 
---Creating table named LoginErrorLog
+
 CREATE TABLE LoginErrorLog
 (
 	ErrorLogID INT NOT NULL IDENTITY(1,1),
@@ -91,7 +71,6 @@ CREATE TABLE LoginErrorLog
 );
 GO
 
---Creating table named Employee
 CREATE TABLE Employee
 (
 	EmployeeID INT NOT NULL IDENTITY(1,1),
@@ -103,7 +82,6 @@ CREATE TABLE Employee
 );
 GO
 
---Creating table named TransactionType
 CREATE TABLE TransactionType
 (
 	TransactionTypeID TINYINT NOT NULL IDENTITY(1,1),
@@ -114,8 +92,6 @@ CREATE TABLE TransactionType
 );
 GO
 
--- Creating tables with foreign key and combination of both primary and foreign keys 
---Creating table named FailedTransactionLog
 CREATE TABLE FailedTransactionLog
 (
 	FailedTransactionID INT NOT NULL IDENTITY(1,1),
@@ -127,7 +103,7 @@ CREATE TABLE FailedTransactionLog
 );
 GO
 
---Creating table named UserSecurityAnswers
+
 CREATE TABLE UserSecurityAnswers
 (
 	UserLoginID SMALLINT NOT NULL IDENTITY(1,1),
@@ -138,7 +114,7 @@ CREATE TABLE UserSecurityAnswers
 	CONSTRAINT fk_USQ_UserSecurityQuestionID FOREIGN KEY(UserSecurityQuestionID) REFERENCES UserSecurityQuestions(UserSecurityQuestionID)
 );
 GO
---Creating table named Account
+
 CREATE TABLE Account
 (
 	AccountID INT NOT NULL IDENTITY(1,1),
@@ -152,8 +128,6 @@ CREATE TABLE Account
 );
 GO
 
---Creating table named LoginAccount
---NOTE: Unlike ER diagram table name has been used as LoginAccounts instead of Login-Account
 CREATE TABLE LoginAccount
 (
 	UserLoginID SMALLINT NOT NULL,
@@ -163,7 +137,7 @@ CREATE TABLE LoginAccount
 );
 GO
 
---Creating table named Customer
+
 CREATE TABLE Customer
 (
 	CustomerID INT NOT NULL IDENTITY(1,1),
@@ -188,8 +162,6 @@ CREATE TABLE Customer
 );
 GO
 
---Creating table named CustomerAccount
---NOTE: Unlike ER diagram table name has been used as CustomerAccounts instead of Customer-Account
 CREATE TABLE CustomerAccount
 (
 	AccountID INT NOT NULL ,
@@ -199,7 +171,7 @@ CREATE TABLE CustomerAccount
 );
 GO
 
---Creating table named TransactionLog
+
 CREATE TABLE TransactionLog
 (
 	TransactionID INT NOT NULL IDENTITY(1,1),
@@ -220,7 +192,7 @@ CREATE TABLE TransactionLog
 );
 GO
 
---Creating table named OverDraftLog
+
 CREATE TABLE OverDraftLog
 (
 	AccountID INT NOT NULL IDENTITY(1,1),
@@ -232,8 +204,6 @@ CREATE TABLE OverDraftLog
 );
 GO
 
---Q4. Insert at least 5 rows in each table. 
-/** INSERT rows section **/
 
 insert into UserLogins values('User1', 'Pass1');
 insert into UserLogins values('User2', 'Pass2');
@@ -353,9 +323,7 @@ insert into OverDraftLog values('2014/7/5 05:56:59', 15, 'Pending');
 insert into OverDraftLog values('2009/10/12 08:34:15', 20, 'Clear');
 
 
--- PHASE II of project begins
 
---Q1. Create a view to get all customers with checking account from ON province. 
 
 DROP VIEW VW_Customer_ON;
 GO
@@ -369,7 +337,7 @@ ON a.AccountTypeID = at.AccountTypeID
 WHERE at.AccountTypeDescription = 'Checking' and c.State = 'ON';
 GO
 
---Q2. Create a view to get all customers with total account balance (including interest rate) greater than 5000. 
+ 
 
 DROP VIEW VW_Customer_AMT;
 GO
@@ -385,7 +353,6 @@ GROUP BY c.CustomerFirstName
 HAVING SUM(a.CurrentBalance + (a.CurrentBalance * s.InterestRatesValue)/100) > 5000;
 GO
 
---Q3. Create a view to get counts of checking and savings accounts by customer. 
 
 DROP VIEW VW_Customer_ACC;
 GO
@@ -400,7 +367,6 @@ ON a.AccountTypeID = at.AccountTypeID
 GROUP BY c.CustomerFirstName, at.AccountTypeDescription;
 GO
 
---Q4. Create a view to get any particular user�s login and password using AccountId. 
 
 DROP VIEW VW_Account_UL;
 GO
@@ -417,7 +383,6 @@ WHERE la.AccountID = '1'
 GO;
 
 
---Q5. Create a view to get all customers� overdraft amount. 
 
 DROP VIEW VW_Customer_OD;
 GO
@@ -430,7 +395,6 @@ JOIN Customer c
 ON o.AccountID = c.AccountID;
 GO
 
---Q6. Create a stored procedure to add "User_" as a prefix to everyone's login (username). 
 
 DROP PROCEDURE sp_Update_Login;
 GO
@@ -443,7 +407,7 @@ GO
 EXEC sp_Update_Login;
 GO
 
---Q7. Create a stored procedure that accepts AccountId as a parameter and returns customer's full name. 
+
 
 DROP PROCEDURE sp_Customer_Details;
 GO
@@ -461,7 +425,6 @@ EXEC sp_Costumer_Details 2;
 GO
 
 
---Q8. Create a stored procedure that returns error logs inserted in the last 24 hours. 
 
 DROP PROCEDURE sp_Errors_24;
 GO
@@ -475,7 +438,7 @@ GO
 EXEC sp_Errors_24;
 GO
 
---Q9. Create a stored procedure that takes a deposit as a parameter and updates CurrentBalance value for that particular account.  
+  
 
 DROP PROCEDURE sp_Update_cBalance_After_Deposit;
 GO
@@ -490,7 +453,7 @@ GO
 EXEC sp_Update_cBalance_After_Deposit 3, 300;
 GO
 
---Q10. Create a stored procedure that takes a withdrawal amount as a parameter and updates CurrentBalance value for that particular account. 
+
 
 DROP PROCEDURE sp_Update_cBalance_After_Withdraw;
 GO
@@ -503,10 +466,7 @@ WHERE AccountID = @AccountID;
 GO
 
 EXEC sp_Update_cBalance_After_Withdraw 3, 300;
-GO
-
-
---Q11. Create a stored procedure to remove all security questions for a particular login. 
+GO 
 
 DROP PROCEDURE sp_Delete_Question;
 GO
@@ -525,7 +485,6 @@ GO
 EXEC sp_Delete_Question 5;
 GO
 
---Q12. Delete all error logs created in the last hour. 
 
 DROP PROCEDURE sp_Delete_Errors;
 GO
@@ -539,7 +498,6 @@ GO
 EXEC sp_Delete_Errors;
 GO
 
---Q13. Write a query to remove SSN column from Customer table. 
 
 DROP PROCEDURE sp_Remove_Column;
 GO
